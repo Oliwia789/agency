@@ -1,0 +1,19 @@
+.home-container {
+    background-image: url(../images/home.jpg);
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: cover;
+    height: 20%;
+    text-align: center;
+    padding: 10%;
+    color: ghostwhite;
+}
+
+.home-container h1 {
+    color: ghostwhite;
+    font-size: 60px;
+}
+
+.home-container p {
+    font-size: 25px;
+}

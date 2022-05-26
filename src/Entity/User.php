@@ -6,10 +6,19 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\ClassMetadata;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Mime\Message;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User
+#[UniqueEntity(fields: ["email"], message: "Cet email est déjà utilisé")]
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -28,6 +37,7 @@ class User
     private $phone;
 
     #[ORM\Column(type: 'string', length: 50)]
+    #[Assert\Email]
     private $email;
 
     #[ORM\Column(type: 'boolean')]
@@ -37,7 +47,13 @@ class User
     private $biens;
 
     #[ORM\Column(type: 'string', length: 50)]
+    #[Assert\Length(min: 8, minMessage: "Le mot de passe doit faire plus de 8 caractères")]
+
     private $password;
+
+    #[Assert\EqualTo(propertyPath: "password", message: "La confirmation ne corresspond pas au mot de passe")]
+
+    public $confirm_password;
 
     public function __construct()
     {
@@ -161,5 +177,21 @@ class User
         $this->password = $password;
 
         return $this;
+    }
+
+    public function eraseCredentials()
+    {
+    }
+    public function getRoles(): array
+    {
+        return ["ROLE_USER"];
+    }
+    public function getUserIdentifier(): string
+    {
+        return $this->email;
+    }
+    public function PasswordAuthenticatedUserInterface()
+    {
+        return $this->password;
     }
 }

@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AgenceController extends AbstractController
 {
-    #[Route('/agence', name: 'app_agence')]
+    #[Route('/biens', name: 'app_agence')]
     public function index(): Response
     {
         return $this->render('agence/index.html.twig', [
@@ -20,5 +20,12 @@ class AgenceController extends AbstractController
     public function home()
     {
         return $this->render("agence/home.html.twig");
+    }
+
+
+    #[Route("/biens/nomBien", name: "bien_show")]
+    public function show()
+    {
+        return $this->render("agence/show.html.twig");
     }
 }

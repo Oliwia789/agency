@@ -184,7 +184,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
     public function getRoles(): array
     {
-        return ["ROLE_USER"];
+        if ($this->admin) {
+            return ["ROLE_ADMIN"];
+        } else {
+            return ["ROLE_USER"];
+        }
     }
     public function getUserIdentifier(): string
     {
@@ -193,5 +197,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function PasswordAuthenticatedUserInterface()
     {
         return $this->password;
+    }
+
+    public function __toString()
+    {
+        return $this->email;
     }
 }
